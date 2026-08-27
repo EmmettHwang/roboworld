@@ -546,3 +546,10 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
 @media (max-width:520px){
   .reuse-list li{grid-template-columns:1fr;gap:2px}
 }
+
+/* ===================== 페스티벌 프로그램 카드 ===================== */
+.cp-en{
+  display:block;font-size:.64rem;letter-spacing:.24em;font-weight:700;
+  color:var(--gold-500);margin-bottom:9px;
+}
+.comp-figure img{background:var(--navy-900)}
