@@ -332,8 +332,8 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
 /* ===================== 문의 ===================== */
 .contact{
   background:
-    linear-gradient(rgba(5,8,16,.9),rgba(5,8,16,.96)),
-    url("../img/night-constellation.jpg") center/cover no-repeat fixed;
+    radial-gradient(120% 90% at 50% 0%,rgba(22,36,60,.55),transparent 62%),
+    var(--navy-900);
 }
 .contact-card{
   max-width:860px;margin:0 auto;text-align:center;
@@ -369,7 +369,6 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
   .campus-main{min-height:280px}
   .hall{grid-template-columns:1fr}
   .hall:nth-child(even) .hall-media{order:0}
-  .contact{background-attachment:scroll}
 }
 @media (max-width:760px){
   .nav{
