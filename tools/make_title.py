@@ -51,7 +51,7 @@ S = 4
 m = Image.new("L", (W*S, H*S), 0)
 d = ImageDraw.Draw(m)
 f = ImageFont.truetype(FB, 27*S)
-sub = "아이들이 돌아오는 군(郡)"
+sub = "아이들이 돌아오는 청양군"
 tr = 3*S
 ws = [d.textlength(c, font=f) for c in sub]
 x = (W*S - (sum(ws) + tr*(len(sub)-1)))/2

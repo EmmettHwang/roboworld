@@ -573,3 +573,9 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
   display:block;font-size:.64rem;letter-spacing:.24em;font-weight:700;
   color:var(--gold-500);margin-bottom:10px;
 }
+
+/* 확정 전 표기 */
+.sec-head h2 .draft{
+  font-size:.46em;font-weight:600;letter-spacing:-.01em;
+  color:var(--gold-500);vertical-align:.32em;margin-left:.18em;
+}
