@@ -353,11 +353,21 @@ GitHub Pages 로 배포되어 있습니다 — <https://emmetthwang.github.io/ro
 - 반응형 (데스크톱 / 태블릿 / 모바일)
 - 다크 네이비 + 골드 (브랜드 컬러 적용)
 
-### 포스터 — `assets/img/robot-festival.png`
+### 페스티벌 이미지 — `assets/img/fest-*.jpg`
 
-국제 로봇 페스티벌 공식 포스터.
-사진 없이 브랜드 톤(다크 네이비 + 골드)으로 직접 그렸습니다.
-`python tools/make_poster.py` 로 다시 생성할 수 있습니다.
+| 파일 | 용도 |
+| ------ | ------ |
+| `fest-main.jpg` | 행사장 전경 (대표 이미지) |
+| `fest-battle.jpg` | 로봇 배틀 아레나 |
+| `fest-ai.jpg` | AI 챌린지 |
+| `fest-expo.jpg` | 로보틱스 엑스포 |
+| `fest-maker.jpg` | 메이커 워크숍 |
+
+원본은 `Docs/새로제작이미지/로봇대회/` 에 있습니다 (장당 약 10MB).
+저장소에는 웹용으로 줄인 것만 넣습니다.
+
+> 브랜드 톤으로 직접 그린 그래픽 포스터가 필요하면
+> `python tools/make_poster.py` 로 생성할 수 있습니다 (현재 사이트에는 미사용).
 
 ---
 
@@ -366,7 +376,6 @@ GitHub Pages 로 배포되어 있습니다 — <https://emmetthwang.github.io/ro
 ```text
 프로젝트 루트/
 ├── README.md                      이 문서 (사업계획 요약)
-├── 세계로봇대회.png                이전 포스터 원본 — 현재 미사용
 ├── Docs/                          완성 산출물
 │   ├── 로보월드캠퍼스_소개영상.mp4   소개영상 (3분 42초)
 │   ├── 나레이션_대본.md             나레이션 전문 · 장면 구성 · 톤 가이드

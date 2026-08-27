@@ -10,7 +10,7 @@
 | `tts_build.py` | 문장별 TTS 합성 → 타이밍에 맞춰 배치 |
 | `make_logo.py` | RWC 로고 이미지 생성 (아웃트로용 · 웹용) |
 | `make_title.py` | 도입부 제안 타이틀 카드 생성 |
-| `make_poster.py` | 국제 로봇 페스티벌 포스터 생성 |
+| `make_poster.py` | 브랜드 톤 그래픽 포스터 생성 (현재 사이트 미사용) |
 
 ---
 

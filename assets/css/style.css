@@ -295,10 +295,26 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
   border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
   margin:0 0 clamp(36px,5vw,52px);position:relative;
 }
-.comp-figure img{width:100%}
-.comp-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
-.cp{padding:26px 24px;border-radius:var(--r);border:1px solid var(--line-soft);background:var(--navy-700)}
-.cp b{display:block;color:var(--gold-300);font-size:1rem;margin-bottom:9px}
+.comp-figure img{width:100%;display:block}
+.comp-figure figcaption{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:34px 28px 22px;
+  background:linear-gradient(transparent,rgba(5,8,16,.92));
+  font-size:.92rem;font-weight:600;color:var(--ink-100);text-align:center;
+}
+.comp-points{display:grid;grid-template-columns:repeat(auto-fit,minmax(236px,1fr));gap:22px}
+.cp{
+  border-radius:var(--r);border:1px solid var(--line-soft);background:var(--navy-700);
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .45s var(--ease),border-color .45s,box-shadow .45s;
+}
+.cp:hover{transform:translateY(-6px);border-color:var(--line);
+  box-shadow:0 26px 54px -28px rgba(0,0,0,.95)}
+.cp-thumb{aspect-ratio:16/9;overflow:hidden;background:var(--navy-600)}
+.cp-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.cp:hover .cp-thumb img{transform:scale(1.07)}
+.cp-body{padding:22px 22px 26px;flex:1}
+.cp b{display:block;color:var(--gold-300);font-size:1.02rem;margin-bottom:9px}
 .cp p{font-size:.9rem;color:var(--ink-300);line-height:1.82}
 
 /* ===================== 지역 ===================== */
@@ -550,6 +566,5 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
 /* ===================== 페스티벌 프로그램 카드 ===================== */
 .cp-en{
   display:block;font-size:.64rem;letter-spacing:.24em;font-weight:700;
-  color:var(--gold-500);margin-bottom:9px;
+  color:var(--gold-500);margin-bottom:10px;
 }
-.comp-figure img{background:var(--navy-900)}
