@@ -369,7 +369,8 @@ GitHub Pages 로 배포되어 있습니다 — <https://emmetthwang.github.io/ro
 ├── 세계로봇대회.png                이전 포스터 원본 — 현재 미사용
 ├── Docs/                          완성 산출물
 │   ├── 로보월드캠퍼스_소개영상.mp4   소개영상 (3분 42초)
-│   └── 나레이션_대본.md             나레이션 전문 · 장면 구성 · 톤 가이드
+│   ├── 나레이션_대본.md             나레이션 전문 · 장면 구성 · 톤 가이드
+│   └── 페스티벌_제작_프롬프트.md     Gemini 이미지 · 영상 제작 프롬프트
 ├── index.html                     사업 소개 웹사이트 (GitHub Pages 진입점)
 ├── assets/                        웹 자산 (css · js · img 32장 · video)
 └── tools/                         제작 도구 및 재작업 가이드 (tools/README.md)
