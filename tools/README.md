@@ -4,7 +4,7 @@
 영상 나레이션을 다시 녹음하거나, 로고·포스터를 수정할 때 사용합니다.
 
 | 파일 | 역할 |
-|------|------|
+| ------ | ------ |
 | `stt.py` | 영상 오디오에서 나레이션 받아쓰기 (faster-whisper) |
 | `script.json` | 나레이션 문장 + 발화 시작 시각 (여기를 고쳐서 대본 수정) |
 | `tts_build.py` | 문장별 TTS 합성 → 타이밍에 맞춰 배치 |
@@ -26,12 +26,17 @@ python -m pip install faster-whisper edge-tts
 
 `ffmpeg` / `ffprobe` 가 PATH 에 있어야 합니다.
 
+> **재작업 소스는 완성본입니다.**
+> 촬영 원본은 보관하지 않습니다. 영상 트랙은 완성본과 동일하므로
+> `Docs/로보월드캠퍼스_소개영상.mp4` 를 그대로 소스로 씁니다.
+> 오디오만 새로 깔면 나레이션을 다시 만들 수 있습니다.
+
 ---
 
 ## 1. 나레이션 받아쓰기
 
 ```bash
-ffmpeg -i "2026_08_22 18_00.mp4" -vn -ac 1 -ar 16000 temp/audio16k.wav
+ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -vn -ac 1 -ar 16000 temp/audio16k.wav
 python tools/stt.py                 # -> temp/transcript.json
 ```
 
@@ -65,7 +70,7 @@ python tools/make_logo.py           # -> temp/outro_logo.png
 같은 스크립트를 살짝 바꿔 세 가지를 뽑습니다.
 
 | 용도 | 방법 |
-|------|------|
+| ------ | ------ |
 | 아웃트로 배경만 | 합성 부분을 `bg.save("temp/outro_bg.png")` 로 교체 |
 | 아웃트로 로고만 (투명) | `out = Image.new("RGBA", (W,H), (0,0,0,0))` 로 시작 |
 | 웹 로고 (투명·크롭) | 위와 같이 하고 `out.crop((330,175,950,545))` 저장 |
@@ -79,7 +84,7 @@ python tools/make_logo.py           # -> temp/outro_logo.png
 로고 아웃트로는 **211.7초부터** 덮어씌웁니다. (원본 야경 씬이 페이드아웃되는 시점)
 
 ```bash
-ffmpeg -i "2026_08_22 18_00.mp4" \
+ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -an \
   -loop 1 -i temp/outro_bg.png -loop 1 -i temp/outro_fg.png -i temp/narration.wav \
   -filter_complex "\
 [1:v]format=rgba,fade=in:st=211.7:d=0.35:alpha=1[bg];\
@@ -89,15 +94,18 @@ ffmpeg -i "2026_08_22 18_00.mp4" \
 [3:a]afade=t=out:st=214.5:d=2.0,aresample=48000[a]" \
   -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p \
   -c:a aac -b:a 160k -movflags +faststart -shortest \
-  "로보월드캠퍼스_소개영상.mp4"
+  "Docs/로보월드캠퍼스_소개영상_new.mp4"
 ```
+
+> 입력과 출력 파일명이 같으면 ffmpeg 가 원본을 덮어써 깨집니다.
+> 새 이름으로 뽑은 뒤 바꿔치기하세요.
 
 ### 웹용 경량 인코딩
 
 ```bash
-ffmpeg -i "로보월드캠퍼스_소개영상.mp4" -c:v libx264 -preset slow -crf 27 \
+ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -c:v libx264 -preset slow -crf 27 \
   -vf scale=1280:720 -c:a aac -b:a 128k -movflags +faststart \
-  web/assets/video/intro.mp4
+  assets/video/intro.mp4
 ```
 
 ---
@@ -105,14 +113,14 @@ ffmpeg -i "로보월드캠퍼스_소개영상.mp4" -c:v libx264 -preset slow -cr
 ## 5. 대회 포스터 텍스트 교체
 
 ```bash
-python tools/fix_comp.py            # -> web/assets/img/robot-competition.png
+python tools/fix_comp.py            # -> assets/img/robot-competition.png
 ```
 
 원본 `세계로봇대회.png` 는 건드리지 않고 웹용 사본만 만듭니다.
 바꾸는 곳은 두 군데입니다.
 
 | 위치 | 좌표 | 처리 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 상단 부제 | `(150,155)-(910,210)` | 가우시안 블러로 지우고 새 문구를 다시 씀 |
 | 중앙 간판 | `(644,346)-(814,363)` | 간판 파란색을 표본 추출해 채우고 새 문구를 씀 |
 
@@ -137,14 +145,14 @@ im.crop((200, 0, 1080, 495))    # 원본 1280x720 기준 · 자막 상단은 y=5
 수정한 영상은 **오디오를 다시 받아써서** 확인합니다.
 
 ```bash
-ffmpeg -i "로보월드캠퍼스_소개영상.mp4" -vn -ac 1 -ar 16000 temp/verify16k.wav
+ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -vn -ac 1 -ar 16000 temp/verify16k.wav
 # stt.py 의 입력 경로를 temp/verify16k.wav 로 바꿔 실행
 ```
 
 로고 구간에 원본 로고가 비치는지는 밝기를 크게 올려 확인합니다.
 
 ```bash
-ffmpeg -ss 211.5 -i "로보월드캠퍼스_소개영상.mp4" -frames:v 1 \
+ffmpeg -ss 211.5 -i "Docs/로보월드캠퍼스_소개영상.mp4" -frames:v 1 \
   -vf "eq=brightness=0.35:contrast=2.2" temp/check.jpg
 ```
 
@@ -154,7 +162,7 @@ ffmpeg -ss 211.5 -i "로보월드캠퍼스_소개영상.mp4" -frames:v 1 \
 ```bash
 chrome --headless=new --disable-gpu --hide-scrollbars \
   --window-size=1440,12000 --virtual-time-budget=9000 \
-  --screenshot=temp/full.png "file:///<절대경로>/web/index.html"
+  --screenshot=temp/full.png "file:///<절대경로>/index.html"
 ```
 
 `.hero` 가 `min-height:100svh` 라 창 높이를 크게 주면 히어로도 같이 늘어납니다.

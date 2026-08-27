@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
-import statistics
+import statistics, os
 
 im = Image.open("세계로봇대회.png").convert("RGB")
 FB = "C:/Windows/Fonts/malgunbd.ttf"
 
-# ---------- (1) 상단 부제 : 에디슨 사이언스 -> 로보월드 ----------
+# ---------- (1) 상단 부제 문구 교체 ----------
 BOX = (150, 155, 910, 210)
 region = im.crop(BOX)
 # 강한 블러로 글자를 지우고 배경 톤만 남김
@@ -36,7 +36,7 @@ d = ImageDraw.Draw(im)
 d.text((x, y), sub, font=f, fill=(255, 255, 255))
 print(f"부제 재작성: 32px, 폭 {w:.0f}px")
 
-# ---------- (2) 중앙 간판 : EDISON SCIENCE -> ROBOWORLD ----------
+# ---------- (2) 중앙 간판 문구 교체 ----------
 SIGN = (644, 346, 814, 363)
 sx0, sy0, sx1, sy1 = SIGN
 # 간판 파란색 표본 (글자 없는 좌·우 끝)
@@ -59,7 +59,10 @@ d.text(((sx0 + sx1) / 2 - tw / 2, (sy0 + sy1) / 2 - (b2[3] + b2[1]) / 2),
        txt, font=f2, fill=(248, 250, 255))
 print(f"간판 재작성: {fs}px, 폭 {tw:.0f}px, 바탕 RGB{blue}")
 
-im.save("web/assets/img/robot-competition.png")
-im.crop((0, 120, 1100, 260)).save("temp/chk_top.png")
-im.crop((600, 320, 860, 385)).resize((1040, 260)).save("temp/chk_sign.png")
-print("saved")
+im.save("assets/img/robot-competition.png")
+
+# 확인용 크롭 (temp/ 가 있을 때만)
+if os.path.isdir("temp"):
+    im.crop((0, 120, 1100, 260)).save("temp/chk_top.png")
+    im.crop((600, 320, 860, 385)).resize((1040, 260)).save("temp/chk_sign.png")
+print("saved assets/img/robot-competition.png")
