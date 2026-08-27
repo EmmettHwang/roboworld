@@ -10,6 +10,7 @@
 | `tts_build.py` | 문장별 TTS 합성 → 타이밍에 맞춰 배치 |
 | `make_logo.py` | RWC 로고 이미지 생성 (아웃트로용 · 웹용) |
 | `make_title.py` | 도입부 제안 타이틀 카드 생성 |
+| `make_bgm.py` | 배경음악 합성 (현재 미사용 — 외부 음원을 씀) |
 | `make_poster.py` | 브랜드 톤 그래픽 포스터 생성 (현재 사이트 미사용) |
 
 ---
@@ -150,6 +151,25 @@ python tools/make_poster.py          # -> assets/img/robot-festival.png
 
 카드 아이콘은 `icon()` 함수에서 기하 도형으로 그립니다
 (`battle` / `ai` / `expo` / `maker`).
+
+## 5-2. 배경음악 입히기
+
+외부에서 받은 음원을 나레이션 아래에 깝니다.
+`-12dB` 가 나레이션보다 7dB 낮은 수준으로, 홍보영상 표준입니다.
+
+```bash
+ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -i "받은음원.mp3"   -filter_complex "[1:a]highpass=f=50,equalizer=f=800:t=q:w=1.4:g=-2,volume=-12dB,afade=t=in:st=0:d=2.5,afade=t=out:st=219.0:d=3.5[b];[0:a][b]amix=inputs=2:duration=first:normalize=0[a]"   -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -movflags +faststart   "Docs/로보월드캠퍼스_소개영상_new.mp4"
+```
+
+| 설정 | 이유 |
+| ------ | ------ |
+| `highpass=50` | 영상에서 안 들리는 저역 제거 |
+| `equalizer=800 -2dB` | 나레이션 명료도 확보 |
+| `volume=-12dB` | 크게 = −8dB · 은은 = −16dB |
+| `normalize=0` | 없으면 amix 가 볼륨을 반으로 나눔 |
+
+레벨 확인은 나레이션이 없는 구간(예: 107~112초)을 재 봅니다.
+BGM 만 들리는 구간이 −25dB 내외면 적절합니다.
 
 ## 6. 웹사이트 이미지 추출
 
