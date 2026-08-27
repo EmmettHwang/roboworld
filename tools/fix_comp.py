@@ -19,7 +19,7 @@ region.paste(blur, (0, 0), mask)
 im.paste(region, BOX[:2])
 
 d = ImageDraw.Draw(im)
-sub = "매년 개최 · 이천 로보월드 캠퍼스타운 유치 추진"
+sub = "매년 개최 · 청양 로보월드 캠퍼스타운 유치 추진"
 f = ImageFont.truetype(FB, 32)
 w = d.textlength(sub, font=f)
 bb = d.textbbox((0, 0), sub, font=f)

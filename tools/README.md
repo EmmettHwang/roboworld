@@ -9,6 +9,7 @@
 | `script.json` | 나레이션 문장 + 발화 시작 시각 (여기를 고쳐서 대본 수정) |
 | `tts_build.py` | 문장별 TTS 합성 → 타이밍에 맞춰 배치 |
 | `make_logo.py` | RWC 로고 이미지 생성 (아웃트로용 · 웹용) |
+| `make_title.py` | 도입부 제안 타이틀 카드 생성 |
 | `fix_comp.py` | 대회 포스터의 텍스트 교체 |
 
 ---
@@ -27,9 +28,12 @@ python -m pip install faster-whisper edge-tts
 `ffmpeg` / `ffprobe` 가 PATH 에 있어야 합니다.
 
 > **재작업 소스는 완성본입니다.**
-> 촬영 원본은 보관하지 않습니다. 영상 트랙은 완성본과 동일하므로
-> `Docs/로보월드캠퍼스_소개영상.mp4` 를 그대로 소스로 씁니다.
+> 촬영 원본은 보관하지 않습니다. `Docs/로보월드캠퍼스_소개영상.mp4` 를 그대로 소스로 씁니다.
 > 오디오만 새로 깔면 나레이션을 다시 만들 수 있습니다.
+>
+> ⚠️ **완성본에는 이미 도입부 타이틀 카드(0:00~0:05)와 로고 아웃트로가 들어 있습니다.**
+> 나레이션만 바꾼다면 타이틀 카드를 다시 붙이지 말고 오디오만 교체하세요.
+> 타이틀 카드까지 다시 만들려면 `-ss 5.5` 로 앞부분을 잘라내고 시작합니다.
 
 ---
 
@@ -81,7 +85,25 @@ python tools/make_logo.py           # -> temp/outro_logo.png
 
 ## 4. 영상 합성
 
-로고 아웃트로는 **211.7초부터** 덮어씌웁니다. (원본 야경 씬이 페이드아웃되는 시점)
+완성본은 이미 타이틀 카드와 로고를 갖고 있으므로, 보통은 **오디오만 교체**하면 됩니다.
+
+```bash
+ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -i temp/narration.wav   -map 0:v -map 1:a -c:v copy -c:a aac -b:a 160k -shortest   "Docs/로보월드캠퍼스_소개영상_new.mp4"
+```
+
+### 타이틀 카드부터 다시 만들 때
+
+`python tools/make_title.py` 로 `temp/title_card.png` 를 만든 뒤,
+완성본에서 기존 타이틀 카드(앞 5.5초)를 잘라내고 새로 붙입니다.
+
+```bash
+ffmpeg -loop 1 -t 5.5 -i temp/title_card.png   -ss 5.5 -i "Docs/로보월드캠퍼스_소개영상.mp4" -i temp/narration.wav   -filter_complex "[0:v]fps=24,scale=1280:720,setsar=1,format=yuv420p,fade=in:st=0:d=0.7,fade=out:st=4.9:d=0.6[t];[1:v]fps=24,scale=1280:720,setsar=1,format=yuv420p[m];[t][m]concat=n=2:v=1:a=0[v];[2:a]afade=t=out:st=220.0:d=2.0,aresample=48000[a]"   -map "[v]" -map "[a]" -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p   -c:a aac -b:a 160k -movflags +faststart -shortest   "Docs/로보월드캠퍼스_소개영상_new.mp4"
+```
+
+### 원본에서 로고 아웃트로를 새로 얹을 때 (참고)
+
+아래는 타이틀 카드가 없던 원본 기준 명령입니다.
+로고는 **211.7초부터** 덮어씌웠습니다. (야경 씬이 페이드아웃되는 시점)
 
 ```bash
 ffmpeg -i "Docs/로보월드캠퍼스_소개영상.mp4" -an \

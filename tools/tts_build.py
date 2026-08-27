@@ -4,8 +4,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import edge_tts
 
 VOICE = "ko-KR-SunHiNeural"     # 친절하고 밝은 여성 (Friendly, Positive)
-SR, TOTAL = 48000, 217.2
-segs = json.load(open("temp/script.json", encoding="utf-8"))
+SR, TOTAL = 48000, 222.7
+segs = json.load(open("tools/script.json", encoding="utf-8"))
 
 def dur(path):
     r = subprocess.run(["ffprobe","-v","error","-show_entries","format=duration",
@@ -23,7 +23,7 @@ def to_wav(mp3, wav):
 async def main():
     # 각 세그먼트의 가용 시간 = 다음 세그먼트 시작까지
     for i, s in enumerate(segs):
-        nxt = segs[i+1]["t"] if i+1 < len(segs) else 211.0
+        nxt = segs[i+1]["t"] if i+1 < len(segs) else 216.5
         s["avail"] = nxt - s["t"] - 0.22
 
     results = []
