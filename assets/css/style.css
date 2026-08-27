@@ -461,14 +461,25 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
 
 /* ===================== 부지 전략 (폐교) ===================== */
 .reuse{
-  display:grid;grid-template-columns:.9fr 1.1fr;gap:0;margin-top:22px;
+  display:grid;grid-template-columns:1fr;gap:0;margin-top:22px;
   border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
   background:linear-gradient(150deg,var(--navy-600),var(--navy-700));
 }
-.reuse-media{overflow:hidden}
-.reuse-media img{width:100%;height:100%;object-fit:cover;min-height:260px;
-  transition:transform 1.2s var(--ease)}
-.reuse:hover .reuse-media img{transform:scale(1.06)}
+/* 비포·애프터 한 장이라 좌우가 잘리면 안 된다 — 전체 폭으로 보여준다 */
+.reuse-media{position:relative;overflow:hidden;aspect-ratio:2816/1536}
+.reuse-media img{width:100%;height:100%;object-fit:cover;display:block}
+.reuse-media figcaption{
+  position:absolute;left:0;right:0;bottom:0;
+  display:flex;justify-content:space-between;gap:16px;
+  padding:40px 28px 20px;
+  background:linear-gradient(transparent,rgba(5,8,16,.88));
+  font-size:.86rem;font-weight:600;color:var(--ink-100);
+}
+.reuse-media figcaption span{display:flex;align-items:center;gap:8px}
+.reuse-media figcaption span::before{
+  content:"";width:7px;height:7px;border-radius:50%;background:var(--gold-500)
+}
+.reuse-media figcaption span.now::before{background:#8b7f6a}
 .reuse-body{padding:clamp(28px,4vw,48px)}
 .reuse-body .kicker{
   font-size:.68rem;letter-spacing:.26em;color:var(--gold-500);
@@ -477,7 +488,8 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
 .reuse-body h3{font-size:clamp(1.2rem,2.4vw,1.68rem);margin-bottom:16px}
 .reuse-body > p{color:var(--ink-300);line-height:1.9;font-size:.97rem}
 .reuse-body strong{color:var(--gold-300);font-weight:700}
-.reuse-list{margin:24px 0;display:grid;gap:1px;background:var(--line-soft);
+.reuse-list{margin:24px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:1px;background:var(--line-soft);
   border:1px solid var(--line-soft);border-radius:12px;overflow:hidden}
 .reuse-list li{
   display:grid;grid-template-columns:130px 1fr;gap:14px;
@@ -553,8 +565,6 @@ section{padding:clamp(72px,10vw,132px) 0;position:relative}
 
 /* ===================== 반응형 추가 ===================== */
 @media (max-width:900px){
-  .reuse{grid-template-columns:1fr}
-  .reuse-media img{min-height:210px}
   .ansgrid li{grid-template-columns:1fr}
   .steps li{grid-template-columns:1fr;gap:6px;text-align:left}
 }
